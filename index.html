@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>GcretanSwap — DEX on Monad</title>
-  <meta name="description" content="GcretanSwap — The Cretan DEX on Monad. Swap, earn $CRET, win daily."/>
+  <meta name="description" content="GcretanSwap — The Gcretan DEX on Monad. Swap, earn $CRET, win daily."/>
   <link rel="icon" href="logo.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"></script>
@@ -732,7 +732,7 @@ footer a:hover { text-decoration: underline; }
         <div class="hero">
           <img class="hero-logo" id="hero-logo" src="logo.png" alt="GcretanSwap"/>
           <div class="hero-sub"><div class="dot-live" style="width:5px;height:5px"></div><span data-en="Live · Monad Mainnet" data-el="Ζωντανά · Monad Mainnet">Live · Monad Mainnet</span></div>
-          <h1><span data-en="GcretanSwap" data-el="GcretanSwap">GcretanSwap</span><br><span style="font-size:0.65em;opacity:0.85" data-en="The Cretan DEX" data-el="Το Κρητικό DEX">The Cretan DEX</span></h1>
+          <h1><span data-en="GcretanSwap" data-el="GcretanSwap">GcretanSwap</span><br><span style="font-size:0.65em;opacity:0.85" data-en="The Gcretan DEX" data-el="Το Gcretan DEX">The Gcretan DEX</span></h1>
           <p data-en="Built by Cretans, for degens.<br>Powered by Uniswap V3 on Monad." data-el="Φτιαγμένο από Κρητικούς, για degens.<br>Τροφοδοτείται από Uniswap V3 στο Monad.">Built by Cretans, for degens.<br>Powered by Uniswap V3 on Monad.</p>
         </div>
 
@@ -975,7 +975,7 @@ const EXPLORER   = 'https://monadscan.com';
 const UNI_ROUTER = '0xfE31F71C1b106EAc32F1A19239c9a9A72ddfb900';
 const UNI_QUOTER = '0x661e93cca42afacb172121ef892830ca3b70f08d';
 const WMON       = '0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A';
-const GCRETANSWAP= '0xd5A0B487D40524FC8cF9dFd00165c85Bcd001716'; // ← paste deployed address
+const GCRETANSWAP= '0xae75083f7A600d63E8fc3769d21c2bb3FB74251C'; // ← paste deployed address
 const FEE_TIERS  = [500, 3000, 10000];
 
 const ABI_Q  = ['function quoteExactInputSingle((address tokenIn,address tokenOut,uint256 amountIn,uint24 fee,uint160 sqrtPriceLimitX96) params) returns (uint256 amountOut,uint160 sqrtPriceX96After,uint32 initializedTicksCrossed,uint256 gasEstimate)'];
@@ -1006,6 +1006,8 @@ let tokOut = BASE_TOKS[2];
 let slippage = 0.5;
 let quotedOut = null;
 let bestFee = 3000;
+let bestRoute = 'direct'; // 'direct' | 'hop'
+let bestFee2  = 3000;     // second hop fee for multi-hop
 let quoteTimer = null;
 let modalFor = 'in';
 let lastSwap = null;
@@ -1013,18 +1015,24 @@ let curLang = 'en';
 let isSpinning = false;
 
 // ── SLOT STATE ───────────────────────────────────────────────
-const SYMBOLS = ['🏺','🐂','🌊','🦅','🌿','🔱','💰','⚡'];
+// Logo symbol = highest value (rendered as <img> in reels)
+const LOGO_SYM = 'LOGO'; // special token
+const SYMBOLS = [LOGO_SYM,'🏺','🐂','🌊','🦅','🌿','🔱','⚡'];
+const SYM_HTML = (s) => s===LOGO_SYM
+  ? `<img src="logo.png" onerror="this.src=LOGO_URI" style="width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;vertical-align:middle"/>`
+  : s;
+
 const PAYLINES = [
-  {syms:['🏺','🏺','🏺'], pts:500,  label:'🏺🏺🏺', name:{en:'AMPHORA JACKPOT', el:'ΤΖΑΚΠΟΤ ΑΜΦΟΡΕΑ'}},
-  {syms:['🐂','🐂','🐂'], pts:300,  label:'🐂🐂🐂', name:{en:'MINOTAUR TRIPLE',el:'ΤΡΙΠΛΟΣ ΜΙΝΩΤΑΥΡΟΣ'}},
-  {syms:['🔱','🔱','🔱'], pts:250,  label:'🔱🔱🔱', name:{en:'TRIDENT POWER',  el:'ΔΥΝΑΜΗ ΤΡΙΑΙΝΑΣ'}},
-  {syms:['🌊','🌊','🌊'], pts:150,  label:'🌊🌊🌊', name:{en:'CRETAN SEA',     el:'ΚΡΗΤΙΚΗ ΘΑΛΑΣΣΑ'}},
-  {syms:['🦅','🦅','🦅'], pts:120,  label:'🦅🦅🦅', name:{en:'EAGLE STRIKE',  el:'ΧΤΥΠΗΜΑ ΑΕΤΟΥ'}},
-  {syms:['🌿','🌿','🌿'], pts:80,   label:'🌿🌿🌿', name:{en:'OLIVE GROVE',   el:'ΕΛΑΙΩΝΑΣ'}},
-  {syms:['💰','💰','💰'], pts:200,  label:'💰💰💰', name:{en:'GOLD TRIPLE',   el:'ΤΡΙΠΛΟ ΧΡΥΣΟ'}},
-  {syms:['⚡','⚡','⚡'], pts:350,  label:'⚡⚡⚡', name:{en:'MONAD POWER',   el:'ΔΥΝΑΜΗ MONAD'}},
-  {any:true, count:2, pts:20, label:'Any 2', name:{en:'2 OF A KIND',    el:'2 ΟΜΟΙΑ'}},
-  {any:true, count:1, pts:5,  label:'Any 1', name:{en:'PARTICIPATION',  el:'ΣΥΜΜΕΤΟΧΗ'}},
+  {syms:[LOGO_SYM,LOGO_SYM,LOGO_SYM], pts:1000, label:'LOGO×3',   name:{en:'GCRETAN JACKPOT 💎', el:'ΤΖΑΚΠΟΤ GCRETAN 💎'}},
+  {syms:['🏺','🏺','🏺'],             pts:500,  label:'🏺🏺🏺',   name:{en:'AMPHORA JACKPOT',     el:'ΤΖΑΚΠΟΤ ΑΜΦΟΡΕΑ'}},
+  {syms:['⚡','⚡','⚡'],             pts:350,  label:'⚡⚡⚡',   name:{en:'MONAD POWER',          el:'ΔΥΝΑΜΗ MONAD'}},
+  {syms:['🐂','🐂','🐂'],             pts:300,  label:'🐂🐂🐂',   name:{en:'MINOTAUR TRIPLE',      el:'ΤΡΙΠΛΟΣ ΜΙΝΩΤΑΥΡΟΣ'}},
+  {syms:['🔱','🔱','🔱'],             pts:250,  label:'🔱🔱🔱',   name:{en:'TRIDENT POWER',        el:'ΔΥΝΑΜΗ ΤΡΙΑΙΝΑΣ'}},
+  {syms:['🌊','🌊','🌊'],             pts:150,  label:'🌊🌊🌊',   name:{en:'CRETAN SEA',           el:'ΚΡΗΤΙΚΗ ΘΑΛΑΣΣΑ'}},
+  {syms:['🦅','🦅','🦅'],             pts:120,  label:'🦅🦅🦅',   name:{en:'EAGLE STRIKE',         el:'ΧΤΥΠΗΜΑ ΑΕΤΟΥ'}},
+  {syms:['🌿','🌿','🌿'],             pts:80,   label:'🌿🌿🌿',   name:{en:'OLIVE GROVE',          el:'ΕΛΑΙΩΝΑΣ'}},
+  {any:true, count:2, pts:20,          label:'Any ×2',             name:{en:'2 OF A KIND',          el:'2 ΟΜΟΙΑ'}},
+  {any:true, count:1, pts:5,           label:'Any ×1',             name:{en:'PARTICIPATION',         el:'ΣΥΜΜΕΤΟΧΗ'}},
 ];
 
 // Persistent slot data (localStorage per wallet)
@@ -1052,15 +1060,7 @@ const SWAP_LB = [
   {addr:'0x5678...ABCD',ens:null,             vol:'$500,000',  swaps:320,title:'Swap Addict'},
   {addr:'0x9012...5678',ens:'anon999.eth',   vol:'$420,000',  swaps:280,title:'Anon Whale'},
 ];
-const SLOT_LB_MOCK = [
-  {addr:'cretan.eth',     pts:4200},
-  {addr:'minotaur.eth',   pts:3750},
-  {addr:'knossos.eth',    pts:3100},
-  {addr:'0xABc...12F',    pts:2800},
-  {addr:'olive.eth',      pts:2150},
-  {addr:'aegean.eth',     pts:1900},
-  {addr:'0x99F...44A',    pts:1400},
-];
+// Slot leaderboard: see renderSlotLB() using localStorage
 
 // ── TRENDING DATA ────────────────────────────────────────────
 const TREND = [
@@ -1179,35 +1179,85 @@ function onAmtIn(){
   quoteTimer=setTimeout(()=>getQuote(v),500);
 }
 
+// ── MULTI-HOP QUOTE ──────────────────────────────────────────
+// Strategy: try ALL fee tiers in parallel for direct route,
+// AND try WMON as intermediate hop (tIn→WMON→tOut) for tokens
+// that only have MON-paired pools. Take the best result.
+const ABI_Q2 = [
+  'function quoteExactInputSingle((address tokenIn,address tokenOut,uint256 amountIn,uint24 fee,uint160 sqrtPriceLimitX96) params) returns (uint256 amountOut,uint160 sqrtPriceX96After,uint32 initializedTicksCrossed,uint256 gasEstimate)',
+  'function quoteExactInput(bytes path,uint256 amountIn) returns (uint256 amountOut,uint160[] sqrtPriceX96AfterList,uint32[] initializedTicksCrossedList,uint256 gasEstimate)'
+];
+
+function encodeMultiHopPath(tokenA, fee1, tokenB, fee2, tokenC){
+  // path = tokenA (20 bytes) + fee1 (3 bytes) + tokenB (20 bytes) + fee2 (3 bytes) + tokenC (20 bytes)
+  const addr = a => a.slice(2).toLowerCase().padStart(40,'0');
+  const f = fee => fee.toString(16).padStart(6,'0');
+  return '0x' + addr(tokenA) + f(fee1) + addr(tokenB) + f(fee2) + addr(tokenC);
+}
+
+async function tryQuoteSingle(quoter, tokenIn, tokenOut, amountIn, fee){
+  try{
+    const [out] = await quoter.quoteExactInputSingle.staticCall({
+      tokenIn, tokenOut, amountIn, fee, sqrtPriceLimitX96:0n
+    });
+    return out;
+  }catch{ return null; }
+}
+
+async function tryQuoteMultiHop(quoter, tokenIn, tokenOut, amountIn, fee1, fee2){
+  try{
+    const path = encodeMultiHopPath(tokenIn, fee1, WMON, fee2, tokenOut);
+    const [out] = await quoter.quoteExactInput.staticCall(path, amountIn);
+    return out;
+  }catch{ return null; }
+}
+
 async function getQuote(amtStr){
   try{
-    const rpc=new ethers.JsonRpcProvider(RPC_URL);
-    const quoter=new ethers.Contract(UNI_QUOTER,ABI_Q,rpc);
-    const tIn=tokIn.native?WMON:tokIn.addr;
-    const tOut=tokOut.native?WMON:tokOut.addr;
-    const amtIn=ethers.parseUnits(amtStr,tokIn.native?18:tokIn.dec);
-    let best=null,bestTier=3000;
-    for(const fee of FEE_TIERS){
-      try{
-        const [out]=await quoter.quoteExactInputSingle.staticCall({tokenIn:tIn,tokenOut:tOut,amountIn:amtIn,fee,sqrtPriceLimitX96:0n});
-        if(best===null||out>best){best=out;bestTier=fee;}
-      }catch{}
+    const rpc = new ethers.JsonRpcProvider(RPC_URL);
+    const quoter = new ethers.Contract(UNI_QUOTER, ABI_Q2, rpc);
+    const tIn  = tokIn.native  ? WMON : tokIn.addr;
+    const tOut = tokOut.native ? WMON : tokOut.addr;
+    const amtIn = ethers.parseUnits(amtStr, tokIn.native?18:tokIn.dec);
+
+    // ── 1. Direct single-hop: all fee tiers in parallel
+    const directResults = await Promise.all(
+      FEE_TIERS.map(fee => tryQuoteSingle(quoter, tIn, tOut, amtIn, fee)
+        .then(out => out ? {out, fee, route:'direct'} : null))
+    );
+
+    // ── 2. Multi-hop via WMON: try fee combinations in parallel
+    // Only needed if tIn and tOut are both non-WMON/MON
+    const isWmonIn  = tIn  === WMON;
+    const isWmonOut = tOut === WMON;
+    let hopResults = [];
+    if(!isWmonIn && !isWmonOut){
+      const feeCombos = [[3000,3000],[500,3000],[3000,500],[10000,3000],[3000,10000],[500,500]];
+      hopResults = await Promise.all(
+        feeCombos.map(([f1,f2]) => tryQuoteMultiHop(quoter, tIn, tOut, amtIn, f1, f2)
+          .then(out => out ? {out, fee:f1, fee2:f2, route:'hop'} : null))
+      );
     }
-    if(best===null){
+
+    // ── 3. Pick best across all results
+    const all = [...directResults, ...hopResults].filter(Boolean);
+    if(all.length === 0){
       document.getElementById('amt-out').textContent='—';
       document.getElementById('no-liq-box').style.display='block';
       quotedOut=null;
     }else{
+      const winner = all.reduce((a,b)=>b.out>a.out?b:a);
       document.getElementById('no-liq-box').style.display='none';
-      quotedOut=best; bestFee=bestTier;
+      quotedOut=winner.out; bestFee=winner.fee; bestRoute=winner.route; bestFee2=winner.fee2||3000;
       const outDec=tokOut.native?18:tokOut.dec;
-      const outStr=parseFloat(ethers.formatUnits(best,outDec)).toFixed(6);
+      const outStr=parseFloat(ethers.formatUnits(winner.out,outDec)).toFixed(6);
       document.getElementById('amt-out').textContent=outStr;
-      const fLbl=bestTier===500?'0.05%':bestTier===3000?'0.3%':'1%';
-      const minOut=(best*BigInt(Math.floor((1-slippage/100)*10000)))/10000n;
+      const fLbl=winner.fee===500?'0.05%':winner.fee===3000?'0.3%':'1%';
+      const routeLbl=winner.route==='hop'?tokIn.sym+' → WMON → '+tokOut.sym:tokIn.sym+' → '+tokOut.sym;
+      const minOut=(winner.out*BigInt(Math.floor((1-slippage/100)*10000)))/10000n;
       const minStr=parseFloat(ethers.formatUnits(minOut,outDec)).toFixed(6);
       const rate=(parseFloat(outStr)/parseFloat(amtStr)).toFixed(4);
-      document.getElementById('r-route').textContent=tokIn.sym+' → '+tokOut.sym;
+      document.getElementById('r-route').textContent=routeLbl;
       document.getElementById('r-fee').textContent=fLbl;
       document.getElementById('r-slip').textContent=slippage+'%';
       document.getElementById('r-min').textContent=minStr+' '+tokOut.sym;
@@ -1250,7 +1300,11 @@ async function onSwap(){
     const tIn=tokIn.native?WMON:tokIn.addr;
     const tOut=tokOut.native?WMON:tokOut.addr;
     const minOut=(quotedOut*BigInt(Math.floor((1-slippage/100)*10000)))/10000n;
-    const router=new ethers.Contract(UNI_ROUTER,ABI_R,signer);
+    const ABI_R_FULL = [
+      'function exactInputSingle((address tokenIn,address tokenOut,uint24 fee,address recipient,uint256 amountIn,uint256 amountOutMinimum,uint160 sqrtPriceLimitX96) params) payable returns (uint256 amountOut)',
+      'function exactInput((bytes path,address recipient,uint256 amountIn,uint256 amountOutMinimum) params) payable returns (uint256 amountOut)'
+    ];
+    const router=new ethers.Contract(UNI_ROUTER,ABI_R_FULL,signer);
 
     if(!tokIn.native){
       const erc20=new ethers.Contract(tokIn.addr,ABI_20,signer);
@@ -1265,7 +1319,14 @@ async function onSwap(){
 
     setStatus(t('⏳ Confirm in wallet…','⏳ Επιβεβαίωση στο πορτοφόλι…'),'info');
     const value=tokIn.native?amtIn:0n;
-    const tx=await router.exactInputSingle({tokenIn:tIn,tokenOut:tOut,fee:bestFee,recipient:userAddr,amountIn:amtIn,amountOutMinimum:minOut,sqrtPriceLimitX96:0n},{value});
+    let tx;
+    if(bestRoute==='hop'){
+      // Multi-hop: tIn → WMON → tOut
+      const path=encodeMultiHopPath(tIn,bestFee,WMON,bestFee2,tOut);
+      tx=await router.exactInput({path,recipient:userAddr,amountIn:amtIn,amountOutMinimum:minOut},{value});
+    }else{
+      tx=await router.exactInputSingle({tokenIn:tIn,tokenOut:tOut,fee:bestFee,recipient:userAddr,amountIn:amtIn,amountOutMinimum:minOut,sqrtPriceLimitX96:0n},{value});
+    }
     setStatus(`⏳ <a href="${EXPLORER}/tx/${tx.hash}" target="_blank" style="color:var(--gold)">${t('Broadcasting…','Εκπομπή…')} ↗</a>`,'info');
     const rcpt=await tx.wait();
     if(rcpt.status===1){
@@ -1323,7 +1384,7 @@ function showShare(){
 }
 function doShareX(){
   if(!lastSwap)return;
-  const txt=encodeURIComponent(`Just swapped ${parseFloat(lastSwap.inAmt).toFixed(4)} ${lastSwap.tokIn.sym} → ${parseFloat(lastSwap.outAmt).toFixed(4)} ${lastSwap.tokOut.sym} on @GcretanSwap 🏺\n\nThe Cretan DEX on Monad 🟣\n\n${location.href}\n\n#Monad #GcretanSwap #DeFi`);
+  const txt=encodeURIComponent(`Just swapped ${parseFloat(lastSwap.inAmt).toFixed(4)} ${lastSwap.tokIn.sym} → ${parseFloat(lastSwap.outAmt).toFixed(4)} ${lastSwap.tokOut.sym} on @GcretanSwap 🏺\n\nThe Gcretan DEX on Monad 🟣\n\n${location.href}\n\n#Monad #GcretanSwap #DeFi`);
   window.open('https://twitter.com/intent/tweet?text='+txt,'_blank');
 }
 function doCopy(){ navigator.clipboard.writeText(location.href); toast(t('Link copied! 🔗','Αντιγράφηκε! 🔗')); }
@@ -1436,31 +1497,65 @@ function updateCretBal(){
 }
 
 function renderPaytable(){
-  document.getElementById('paytable').innerHTML=PAYLINES.map(p=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0">
-      <span style="font-size:14px">${p.label}</span>
+  document.getElementById('paytable').innerHTML=PAYLINES.map(p=>{
+    const logoImg='<img src="logo.png" onerror="this.src=LOGO_URI" style="width:15px;height:15px;border-radius:50%;vertical-align:middle;border:1px solid var(--gold);margin-right:1px"/>';
+    const labelHtml=p.label==='LOGO×3'
+      ? logoImg+logoImg+logoImg
+      : `<span style="font-size:12px">${p.label}</span>`;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0">
+      <span>${labelHtml}</span>
       <span style="font-family:var(--font-mono);font-size:10px;color:var(--gold)">+${p.pts} $CRET</span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+}
+
+// ── REAL SLOT LEADERBOARD via localStorage ────────────────────
+const GLOBAL_LB_KEY = 'gcret_global_lb';
+function getGlobalLB(){
+  try{ return JSON.parse(localStorage.getItem(GLOBAL_LB_KEY)||'[]'); }catch{ return []; }
+}
+function saveGlobalLB(arr){ localStorage.setItem(GLOBAL_LB_KEY,JSON.stringify(arr)); }
+function upsertGlobalLB(addr,pts){
+  let lb=getGlobalLB();
+  if(lb.length===0) lb=[
+    {addr:'cretan.eth',pts:4200},{addr:'minotaur.eth',pts:3750},
+    {addr:'knossos.eth',pts:3100},{addr:'0xABc…12F',pts:2800},
+    {addr:'olive.eth',pts:2150},{addr:'aegean.eth',pts:1900},
+    {addr:'0x99F…44A',pts:1400},
+  ];
+  const short=addr.slice(0,6)+'…'+addr.slice(-4);
+  const idx=lb.findIndex(e=>e.addr===short||e.addr===addr);
+  if(idx>=0) lb[idx].pts=Math.max(lb[idx].pts,pts);
+  else lb.push({addr:short,pts});
+  lb.sort((a,b)=>b.pts-a.pts);
+  saveGlobalLB(lb);
+  return lb;
 }
 
 function renderSlotLB(){
-  // merge real user data with mock
-  let entries=[...SLOT_LB_MOCK];
+  let lb=getGlobalLB();
+  if(lb.length===0) lb=[
+    {addr:'cretan.eth',pts:4200},{addr:'minotaur.eth',pts:3750},
+    {addr:'knossos.eth',pts:3100},{addr:'0xABc…12F',pts:2800},
+    {addr:'olive.eth',pts:2150},{addr:'aegean.eth',pts:1900},
+    {addr:'0x99F…44A',pts:1400},
+  ];
   if(userAddr){
     const d=getSlotState();
     const short=userAddr.slice(0,6)+'…'+userAddr.slice(-4);
-    const exists=entries.find(e=>e.addr===short);
-    if(exists) exists.pts=Math.max(exists.pts,d.pts);
-    else if(d.pts>0) entries.push({addr:short,pts:d.pts});
-    entries.sort((a,b)=>b.pts-a.pts);
-    entries=entries.slice(0,7);
+    const idx=lb.findIndex(e=>e.addr===short);
+    if(idx>=0) lb[idx].pts=Math.max(lb[idx].pts,d.pts);
+    else if(d.pts>0) lb.push({addr:short,pts:d.pts});
+    lb.sort((a,b)=>b.pts-a.pts);
   }
+  lb=lb.slice(0,8);
   const medals=['👑','🥈','🥉'];
-  document.getElementById('slot-lb').innerHTML=entries.map((e,i)=>{
-    const isMe=userAddr&&e.addr===userAddr.slice(0,6)+'…'+userAddr.slice(-4);
-    return `<div class="lb-row" style="${isMe?'background:rgba(196,156,52,0.06);border-radius:7px':''}">
+  const myShort=userAddr?userAddr.slice(0,6)+'…'+userAddr.slice(-4):null;
+  document.getElementById('slot-lb').innerHTML=lb.map((e,i)=>{
+    const isMe=myShort&&e.addr===myShort;
+    return `<div class="lb-row" style="${isMe?'background:rgba(196,156,52,0.08);border-radius:7px':''}">
       <div class="lb-rank">${medals[i]||i+1}</div>
-      <div class="lb-name" style="${isMe?'color:var(--gold)':''}">${e.addr}${isMe?' ←':''}</div>
+      <div class="lb-name" style="${isMe?'color:var(--gold)':''}">${e.addr}${isMe?' ◀':''}</div>
       <div class="lb-pts">${e.pts.toLocaleString()}</div>
     </div>`;
   }).join('');
@@ -1491,7 +1586,7 @@ async function doSpin(){
     const spins=8+i*3;
     for(let j=0;j<spins;j++) items.push(SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)]);
     items.push(result[i]);
-    reel.innerHTML=items.map(s=>`<div class="reel-sym">${s}</div>`).join('');
+    reel.innerHTML=items.map(s=>`<div class="reel-sym">${SYM_HTML(s)}</div>`).join('');
     let frame=0;
     const total=items.length;
     const interval=setInterval(()=>{
@@ -1502,7 +1597,7 @@ async function doSpin(){
       reel.style.top='-'+(frame*80)*(1-ease*0.3)+'%'; // simplified visual
       if(frame>=total-1){
         clearInterval(interval);
-        reel.innerHTML=`<div class="reel-sym">${result[i]}</div>`;
+        reel.innerHTML=`<div class="reel-sym">${SYM_HTML(result[i])}</div>`;
         reel.style.top='0';
         setTimeout(resolve,100);
       }
@@ -1527,6 +1622,7 @@ async function doSpin(){
 
   // Update state
   d.spinsLeft--; d.pts+=won; saveSlotData(d);
+  upsertGlobalLB(userAddr, d.pts);
 
   // Highlight winning reels
   if(result[0]===result[1]&&result[1]===result[2]){
@@ -1536,13 +1632,14 @@ async function doSpin(){
 
   // Show result
   const wb=document.getElementById('win-box');
+  const resultHtml=result.map(s=>SYM_HTML(s)).join(' ');
   if(won>=100){
     wb.className='win-box win';
     wb.innerHTML=`🎉 ${winName}! +${won} $CRET`;
     toast(`🎉 ${winName}! +${won} $CRET`);
   } else {
     wb.className='win-box no-win';
-    wb.innerHTML=`${result.join('')} · +${won} $CRET — ${winName}`;
+    wb.innerHTML=`<span style="display:inline-flex;align-items:center;gap:3px;vertical-align:middle">${resultHtml}</span> · +${won} $CRET — ${winName}`;
   }
 
   updateCretBal();
