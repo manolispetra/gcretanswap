@@ -629,6 +629,194 @@ main { position: relative; z-index: 1; }
 #toast.err  { border-color: rgba(231,76,60,0.4);  color: var(--red); }
 #toast.info { border-color: rgba(196,156,52,0.4); color: var(--gold); }
 
+/* ── LANGUAGE DROPDOWN ──────────────────────────────────── */
+.lang-drop-wrap { position: relative; }
+.lang-menu {
+  display: none; position: absolute; top: calc(100% + 6px); right: 0;
+  background: var(--card); border: 1px solid var(--edge); border-radius: 12px;
+  padding: 5px; min-width: 145px; z-index: 300;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  animation: popIn 0.15s ease both;
+}
+.lang-menu.open { display: block; }
+.lang-item {
+  padding: 8px 12px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: background 0.15s; font-family: var(--font-body);
+  color: var(--cream); display: flex; align-items: center; gap: 7px;
+}
+.lang-item:hover { background: rgba(196,156,52,0.12); color: var(--gold); }
+
+/* ── CROSS-CHAIN PAGE ────────────────────────────────────── */
+.xchain-layout {
+  max-width: 820px; margin: 0 auto; padding: 44px 20px 80px;
+}
+.xchain-hero { text-align: center; margin-bottom: 36px; animation: rise 0.5s ease both; }
+.xchain-hero h2 {
+  font-family: var(--font-disp); font-size: clamp(1.4rem,3vw,2.2rem);
+  font-weight: 700; letter-spacing: 0.06em; color: var(--gold); margin-bottom: 10px;
+}
+.xchain-hero p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.xchain-card {
+  background: var(--card); border: 1px solid var(--edge); border-radius: 22px;
+  padding: 28px; box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  position: relative; overflow: hidden;
+}
+.xchain-card::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(42,107,140,0.08), transparent);
+  pointer-events: none;
+}
+.xchain-grid {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: end;
+  margin-bottom: 20px;
+}
+.xchain-col { display: flex; flex-direction: column; gap: 8px; }
+.xchain-lbl {
+  font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.coin-select-wrap { position: relative; }
+.coin-select-btn {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border-radius: 12px; cursor: pointer;
+  background: var(--lift); border: 1px solid rgba(255,255,255,0.07);
+  transition: all 0.2s;
+}
+.coin-select-btn:hover { border-color: rgba(196,156,52,0.35); }
+.coin-ico { font-size: 22px; flex-shrink: 0; }
+.coin-info { flex: 1; text-align: left; }
+.coin-sym { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--cream); }
+.coin-net { font-size: 10px; color: var(--muted); }
+.coin-arr { font-size: 9px; color: var(--muted); margin-left: auto; }
+.xchain-arrow {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 10px; margin-bottom: 2px;
+  background: var(--deep); border: 1.5px solid rgba(196,156,52,0.28);
+  font-size: 16px; cursor: pointer; transition: all 0.3s; align-self: center;
+}
+.xchain-arrow:hover { transform: rotate(180deg); border-color: var(--gold); }
+.xchain-amount-wrap {
+  background: var(--lift); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 12px 14px; transition: all 0.2s;
+}
+.xchain-amount-wrap:focus-within { border-color: rgba(196,156,52,0.35); }
+.xchain-amt-top { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 10px; }
+.xchain-amt-lbl { font-family: var(--font-mono); color: var(--muted); letter-spacing: 0.04em; }
+.xchain-amt-rate { font-family: var(--font-mono); color: var(--gold); font-weight: 700; }
+.xchain-input {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-family: var(--font-mono); font-size: 22px; font-weight: 700;
+  color: var(--cream);
+}
+.xchain-input::placeholder { color: rgba(242,232,208,0.1); }
+.xchain-input::-webkit-outer-spin-button,.xchain-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.xchain-out-display {
+  font-family: var(--font-mono); font-size: 22px; font-weight: 700;
+  color: rgba(242,232,208,0.8); min-height: 32px;
+}
+.dest-section { margin-bottom: 18px; }
+.dest-input {
+  width: 100%; padding: 11px 14px; border-radius: 12px; font-size: 13px;
+  background: var(--lift); border: 1px solid rgba(255,255,255,0.07);
+  color: var(--cream); outline: none; font-family: var(--font-mono);
+  transition: border-color 0.2s;
+}
+.dest-input:focus { border-color: rgba(196,156,52,0.35); }
+.dest-input::placeholder { color: var(--muted); }
+.rate-type-row { display: flex; gap: 6px; margin-bottom: 18px; }
+.rate-type-btn {
+  flex: 1; padding: 8px; border-radius: 9px; font-size: 11px; font-weight: 700;
+  font-family: var(--font-mono); cursor: pointer; transition: all 0.2s; text-align: center;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); color: var(--muted);
+}
+.rate-type-btn.on {
+  background: rgba(196,156,52,0.12); border-color: rgba(196,156,52,0.3); color: var(--gold);
+}
+.xchain-info {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 11px; padding: 10px 14px; margin-bottom: 16px; display: none;
+}
+.xchain-info-row { display: flex; justify-content: space-between; font-size: 10px; padding: 2px 0; }
+.xi-lbl { color: var(--muted); font-family: var(--font-mono); }
+.xi-val { font-family: var(--font-mono); font-weight: 700; font-size: 10px; }
+.btn-xchain {
+  width: 100%; padding: 15px; border-radius: 14px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, #1a5a3a 0%, #27ae60 50%, #1a5a3a 100%);
+  border: 1px solid rgba(46,204,113,0.4);
+  color: #fff; font-family: var(--font-disp); font-weight: 700; font-size: 14px;
+  letter-spacing: 0.08em; transition: all 0.25s; position: relative; overflow: hidden;
+}
+.btn-xchain::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%); transition: transform 0.6s;
+}
+.btn-xchain:hover::after { transform: translateX(100%); }
+.btn-xchain:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(46,204,113,0.3); }
+.btn-xchain:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+.xchain-status {
+  margin-top: 12px; padding: 12px 14px; border-radius: 12px;
+  font-size: 11px; font-family: var(--font-mono); display: none; line-height: 1.6;
+}
+.xchain-status.info    { background: rgba(196,156,52,0.07); border: 1px solid rgba(196,156,52,0.18); color: var(--gold); display: block; }
+.xchain-status.success { background: rgba(46,204,113,0.07); border: 1px solid rgba(46,204,113,0.22); color: var(--green); display: block; }
+.xchain-status.error   { background: rgba(231,76,60,0.07); border: 1px solid rgba(231,76,60,0.22); color: var(--red); display: block; }
+/* Shift result card */
+.shift-result {
+  display: none; margin-top: 16px;
+  background: var(--card); border: 1px solid rgba(46,204,113,0.25);
+  border-radius: 16px; padding: 20px;
+}
+.shift-result.show { display: block; animation: rise 0.4s ease both; }
+.sr-title { font-family: var(--font-disp); font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 14px; letter-spacing: 0.06em; }
+.sr-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 12px; }
+.sr-row:last-child { border-bottom: none; }
+.sr-key { color: var(--muted); font-family: var(--font-mono); }
+.sr-val { font-family: var(--font-mono); font-weight: 700; word-break: break-all; text-align: right; max-width: 60%; }
+.sr-deposit-box {
+  margin-top: 14px; padding: 14px; border-radius: 12px;
+  background: rgba(196,156,52,0.08); border: 1px solid rgba(196,156,52,0.2); text-align: center;
+}
+.sr-deposit-lbl { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing: 0.07em; margin-bottom: 8px; }
+.sr-deposit-addr {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--gold);
+  word-break: break-all; background: var(--deep); padding: 10px 12px; border-radius: 8px;
+  margin-bottom: 8px; cursor: pointer; transition: opacity 0.2s;
+}
+.sr-deposit-addr:hover { opacity: 0.75; }
+.sr-status-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 999px; font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+}
+.sr-status-badge.waiting { background: rgba(196,156,52,0.15); color: var(--gold); border: 1px solid rgba(196,156,52,0.3); }
+.sr-status-badge.settled { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+/* Coin selector modal */
+.coin-modal { max-width: 400px; }
+.coin-search {
+  width: 100%; padding: 9px 12px; border-radius: 10px; font-size: 12px;
+  background: var(--lift); border: 1px solid var(--edge); color: var(--cream);
+  outline: none; margin-bottom: 10px; font-family: var(--font-body);
+}
+.coin-search:focus { border-color: rgba(196,156,52,0.4); }
+.coin-search::placeholder { color: var(--muted); }
+.coin-list { max-height: 340px; overflow-y: auto; }
+.coin-list-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+  border-radius: 9px; cursor: pointer; transition: background 0.15s;
+}
+.coin-list-item:hover { background: rgba(255,255,255,0.05); }
+.cli-ico { font-size: 20px; flex-shrink: 0; }
+.cli-name { font-weight: 700; font-size: 13px; }
+.cli-net { font-size: 10px; color: var(--muted); font-family: var(--font-mono); }
+.cli-ck { margin-left: auto; color: var(--gold); }
+.xchain-powered {
+  text-align: center; margin-top: 12px;
+  font-family: var(--font-mono); font-size: 10px; color: var(--muted);
+}
+.xchain-powered a { color: var(--gold); text-decoration: none; }
+.xchain-powered a:hover { text-decoration: underline; }
+
 /* ── FOOTER ─────────────────────────────────────────────── */
 footer { text-align: center; padding: 26px 20px; border-top: 1px solid var(--edge); color: var(--muted); font-size: 10px; font-family: var(--font-mono); letter-spacing: 0.03em; }
 footer a { color: var(--gold); text-decoration: none; }
@@ -709,10 +897,20 @@ footer a:hover { text-decoration: underline; }
     <button class="nav-tab active" onclick="showTab('swap',this)" id="tab-btn-swap" data-en="⚡ Swap" data-el="⚡ Ανταλλαγή">⚡ Swap</button>
     <button class="nav-tab" onclick="showTab('trending',this)" id="tab-btn-trending" data-en="🔥 Trending" data-el="🔥 Τάση">🔥 Trending</button>
     <button class="nav-tab" onclick="showTab('leaderboard',this)" id="tab-btn-leaderboard" data-en="🏆 Leaderboard" data-el="🏆 Κατάταξη">🏆 Leaderboard</button>
+    <button class="nav-tab" onclick="showTab('crosschain',this)" id="tab-btn-crosschain" data-en="🌐 Cross-Chain" data-el="🌐 Cross-Chain" data-de="🌐 Cross-Chain" data-fr="🌐 Cross-Chain" data-ru="🌐 Кросс-Чейн">🌐 Cross-Chain</button>
   </div>
   <div class="nav-right">
     <div class="chain-pill"><div class="dot-live"></div>Monad · 143</div>
-    <button class="btn-lang" onclick="toggleLang()" id="lang-btn">🇬🇷 EL</button>
+    <div class="lang-drop-wrap">
+    <button class="btn-lang" onclick="toggleLangMenu()" id="lang-btn">🇬🇷 EL ▾</button>
+    <div class="lang-menu" id="lang-menu">
+      <div class="lang-item" onclick="setLang('en')">🇬🇧 English</div>
+      <div class="lang-item" onclick="setLang('el')">🇬🇷 Ελληνικά</div>
+      <div class="lang-item" onclick="setLang('de')">🇩🇪 Deutsch</div>
+      <div class="lang-item" onclick="setLang('fr')">🇫🇷 Français</div>
+      <div class="lang-item" onclick="setLang('ru')">🇷🇺 Русский</div>
+    </div>
+  </div>
     <div id="wallet-area">
       <button class="btn-connect" onclick="connectWallet()" data-en="Connect Wallet" data-el="Σύνδεση">Connect Wallet</button>
     </div>
@@ -929,6 +1127,116 @@ footer a:hover { text-decoration: underline; }
     </div>
   </div>
 
+  <!-- ▓▓ CROSS-CHAIN ▓▓ -->
+  <div class="page" id="tab-crosschain">
+    <div class="xchain-layout">
+
+      <div class="xchain-hero">
+        <div class="hero-sub" style="margin-bottom:14px"><div class="dot-live" style="width:5px;height:5px"></div><span data-en="Powered by SideShift.ai" data-el="Με τεχνολογία SideShift.ai" data-de="Powered by SideShift.ai" data-fr="Propulsé par SideShift.ai" data-ru="Работает на SideShift.ai">Powered by SideShift.ai</span></div>
+        <h2 data-en="🌐 Cross-Chain Exchange" data-el="🌐 Cross-Chain Ανταλλαγή" data-de="🌐 Cross-Chain Tausch" data-fr="🌐 Échange Cross-Chain" data-ru="🌐 Кросс-чейн Обмен">🌐 Cross-Chain Exchange</h2>
+        <p data-en="Swap any crypto, on any chain. No wallet needed — deposit &amp; receive anywhere." data-el="Ανταλλαγή οποιουδήποτε crypto, σε οποιοδήποτε chain. Χωρίς wallet — κατάθεση &amp; λήψη οπουδήποτε." data-de="Tauschen Sie beliebige Krypto auf jeder Chain. Kein Wallet nötig." data-fr="Échangez n'importe quelle crypto sur n'importe quelle chaîne. Sans wallet." data-ru="Обменивайте любую крипту на любом чейне. Без кошелька.">Swap any crypto, on any chain. No wallet needed — deposit &amp; receive anywhere.</p>
+      </div>
+
+      <div class="xchain-card">
+        <!-- Rate type selector -->
+        <div class="rate-type-row">
+          <div class="rate-type-btn on" id="rate-var" onclick="setRateType('variable',this)" data-en="⚡ Variable Rate" data-el="⚡ Μεταβλητή Τιμή" data-de="⚡ Variabler Kurs" data-fr="⚡ Taux Variable" data-ru="⚡ Плавающий курс">⚡ Variable Rate</div>
+          <div class="rate-type-btn" id="rate-fix" onclick="setRateType('fixed',this)" data-en="🔒 Fixed Rate" data-el="🔒 Σταθερή Τιμή" data-de="🔒 Fester Kurs" data-fr="🔒 Taux Fixe" data-ru="🔒 Фиксированный курс">🔒 Fixed Rate</div>
+        </div>
+
+        <!-- FROM / TO grid -->
+        <div class="xchain-grid">
+          <!-- FROM -->
+          <div class="xchain-col">
+            <div class="xchain-lbl" data-en="FROM" data-el="ΑΠΟ" data-de="VON" data-fr="DE" data-ru="ИЗ">FROM</div>
+            <div class="xchain-amount-wrap">
+              <div class="xchain-amt-top">
+                <span class="xchain-amt-lbl" data-en="AMOUNT" data-el="ΠΟΣΟ" data-de="BETRAG" data-fr="MONTANT" data-ru="СУММА">AMOUNT</span>
+                <span class="xchain-amt-rate" id="xc-min-lbl"></span>
+              </div>
+              <input class="xchain-input" id="xc-amount-in" type="number" placeholder="0.0" min="0" step="any" oninput="onXcAmtIn()"/>
+            </div>
+            <div class="coin-select-btn" onclick="openCoinModal('from')" id="xc-from-btn">
+              <span class="coin-ico" id="xc-from-ico">₿</span>
+              <div class="coin-info">
+                <div class="coin-sym" id="xc-from-sym">BTC</div>
+                <div class="coin-net" id="xc-from-net">Bitcoin</div>
+              </div>
+              <span class="coin-arr">▾</span>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="xchain-arrow" onclick="flipXchain()">⇄</div>
+
+          <!-- TO -->
+          <div class="xchain-col">
+            <div class="xchain-lbl" data-en="TO" data-el="ΠΡΟΣ" data-de="ZU" data-fr="VERS" data-ru="В">TO</div>
+            <div class="xchain-amount-wrap">
+              <div class="xchain-amt-top">
+                <span class="xchain-amt-lbl" data-en="YOU RECEIVE (~)" data-el="ΛΑΜΒΑΝΕΙΣ (~)" data-de="SIE ERHALTEN (~)" data-fr="VOUS RECEVEZ (~)" data-ru="ПОЛУЧИТЕ (~)">YOU RECEIVE (~)</span>
+                <span class="xchain-amt-rate" id="xc-rate-lbl" style="color:var(--muted)"></span>
+              </div>
+              <div class="xchain-out-display" id="xc-amount-out">—</div>
+            </div>
+            <div class="coin-select-btn" onclick="openCoinModal('to')" id="xc-to-btn">
+              <span class="coin-ico" id="xc-to-ico">⟠</span>
+              <div class="coin-info">
+                <div class="coin-sym" id="xc-to-sym">ETH</div>
+                <div class="coin-net" id="xc-to-net">Ethereum</div>
+              </div>
+              <span class="coin-arr">▾</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Destination address -->
+        <div class="dest-section">
+          <div class="xchain-lbl" style="margin-bottom:6px" data-en="DESTINATION ADDRESS (where you want to receive)" data-el="ΔΙΕΥΘΥΝΣΗ ΠΡΟΟΡΙΣΜΟΥ (πού να λάβεις)" data-de="ZIELADRESSE (wo Sie empfangen möchten)" data-fr="ADRESSE DE DESTINATION" data-ru="АДРЕС ПОЛУЧЕНИЯ">DESTINATION ADDRESS (where you want to receive)</div>
+          <input class="dest-input" id="xc-dest-addr" placeholder="Enter destination address..." oninput="onXcDestInput()"/>
+        </div>
+
+        <!-- Rate info box -->
+        <div class="xchain-info" id="xc-info">
+          <div class="xchain-info-row"><span class="xi-lbl" data-en="RATE" data-el="ΤΙΜΗ" data-de="KURS" data-fr="TAUX" data-ru="КУРС">RATE</span><span class="xi-val" id="xi-rate">—</span></div>
+          <div class="xchain-info-row"><span class="xi-lbl" data-en="MIN DEPOSIT" data-el="ΕΛΑΧΙΣΤΗ ΚΑΤΑΘΕΣΗ" data-de="MIN. EINZAHLUNG" data-fr="DÉPÔT MIN." data-ru="МИН. ДЕПОЗИТ">MIN DEPOSIT</span><span class="xi-val" id="xi-min">—</span></div>
+          <div class="xchain-info-row"><span class="xi-lbl" data-en="MAX DEPOSIT" data-el="ΜΕΓΙΣΤΗ ΚΑΤΑΘΕΣΗ" data-de="MAX. EINZAHLUNG" data-fr="DÉPÔT MAX." data-ru="МАКС. ДЕПОЗИТ">MAX DEPOSIT</span><span class="xi-val" id="xi-max">—</span></div>
+          <div class="xchain-info-row"><span class="xi-lbl" data-en="NETWORK FEE" data-el="ΧΡΕΩΣΗ ΔΙΚΤΥΟΥ" data-de="NETZWERKGEBÜHR" data-fr="FRAIS RÉSEAU" data-ru="КОМИССИЯ СЕТИ">NETWORK FEE</span><span class="xi-val" id="xi-fee" style="color:var(--amber)">~0.3%</span></div>
+        </div>
+
+        <!-- Create shift button -->
+        <button class="btn-xchain" id="btn-xchain" onclick="createShift()" disabled>
+          <span id="btn-xchain-txt" data-en="Enter amount &amp; address" data-el="Εισαγωγή ποσού &amp; διεύθυνσης" data-de="Betrag &amp; Adresse eingeben" data-fr="Entrez le montant &amp; l'adresse" data-ru="Введите сумму и адрес">Enter amount &amp; address</span>
+        </button>
+
+        <div class="xchain-status" id="xc-status"></div>
+
+        <!-- Shift result -->
+        <div class="shift-result" id="shift-result">
+          <div class="sr-title">✅ <span data-en="Shift Created!" data-el="Η Ανταλλαγή Δημιουργήθηκε!" data-de="Tausch erstellt!" data-fr="Échange créé!" data-ru="Обмен создан!">Shift Created!</span></div>
+          <div id="sr-details"></div>
+          <div class="sr-deposit-box">
+            <div class="sr-deposit-lbl" data-en="SEND EXACTLY THIS AMOUNT TO THIS ADDRESS" data-el="ΣΤΕΙΛΕ ΑΚΡΙΒΩΣ ΑΥΤΟ ΤΟ ΠΟΣΟ ΣΕ ΑΥΤΗ ΤΗ ΔΙΕΥΘΥΝΣΗ" data-de="SENDE GENAU DIESEN BETRAG AN DIESE ADRESSE" data-fr="ENVOYEZ EXACTEMENT CE MONTANT À CETTE ADRESSE" data-ru="ОТПРАВЬТЕ ТОЧНУЮ СУММУ НА ЭТОТ АДРЕС">SEND EXACTLY THIS AMOUNT TO THIS ADDRESS</div>
+            <div class="sr-deposit-addr" id="sr-deposit-addr" onclick="copyDepositAddr()" title="Click to copy"></div>
+            <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px" data-en="Click to copy · After sending, the shift processes automatically" data-el="Κλικ για αντιγραφή · Μετά την αποστολή, η ανταλλαγή γίνεται αυτόματα" data-de="Klicken zum Kopieren · Nach dem Senden wird automatisch verarbeitet" data-fr="Cliquez pour copier · Après envoi, traitement automatique" data-ru="Нажмите для копирования · После отправки обмен обрабатывается автоматически">Click to copy · After sending, the shift processes automatically</div>
+          </div>
+          <div style="text-align:center;margin-top:12px">
+            <span class="sr-status-badge waiting" id="sr-status-badge"><div class="dot-live" style="width:5px;height:5px;margin-right:4px"></div><span id="sr-status-txt">Waiting for deposit</span></span>
+          </div>
+          <div style="margin-top:10px;text-align:center">
+            <a id="sr-explorer-link" href="#" target="_blank" style="font-family:var(--font-mono);font-size:10px;color:var(--gold);text-decoration:none">View on SideShift ↗</a>
+          </div>
+        </div>
+
+        <div class="xchain-powered">
+          <span data-en="Cross-chain swaps powered by" data-el="Cross-chain swaps από" data-de="Cross-Chain-Tausch powered by" data-fr="Échanges cross-chain propulsés par" data-ru="Кросс-чейн обмены на основе">Cross-chain swaps powered by</span>
+          <a href="https://sideshift.ai" target="_blank">SideShift.ai</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </main>
 
 <footer>
@@ -959,6 +1267,18 @@ footer a:hover { text-decoration: underline; }
       <div class="custom-status" id="custom-st"></div>
       <div class="liq-note" data-en="⚠️ Custom tokens may have no liquidity on Monad. Check GeckoTerminal before trading." data-el="⚠️ Τα custom tokens ενδέχεται να μην έχουν ρευστότητα στο Monad. Έλεγξε το GeckoTerminal πριν.">⚠️ Custom tokens may have no liquidity on Monad. Check GeckoTerminal before trading.</div>
     </div>
+  </div>
+</div>
+
+<!-- ═══ COIN MODAL (Cross-Chain) ════════════════════════════ -->
+<div class="overlay" id="coin-modal" onclick="closeCoinBg(event)">
+  <div class="modal coin-modal">
+    <div class="modal-head">
+      <span class="modal-tit" data-en="Select Coin" data-el="Επιλογή Νομίσματος" data-de="Münze wählen" data-fr="Choisir la Devise" data-ru="Выбрать монету">Select Coin</span>
+      <button class="modal-x" onclick="closeCoinModal()">✕</button>
+    </div>
+    <input class="coin-search" id="coin-search-inp" placeholder="Search coin or network..." oninput="renderCoinList()"/>
+    <div class="coin-list" id="coin-list"></div>
   </div>
 </div>
 
@@ -1077,8 +1397,8 @@ const TREND = [
 ];
 
 // ── LANGUAGE ─────────────────────────────────────────────────
-function toggleLang(){
-  curLang = curLang==='en'?'el':'en';
+function toggleLang(){ toggleLangMenu(); } // legacy compat
+function _oldToggleLang(){
   document.getElementById('lang-btn').textContent = curLang==='en'?'🇬🇷 EL':'🇬🇧 EN';
   document.querySelectorAll('[data-en]').forEach(el=>{
     const t = el.getAttribute('data-'+curLang);
@@ -1660,6 +1980,8 @@ function showTab(name,btn){
     const b=document.getElementById('tab-btn-'+name);
     if(b) b.classList.add('active');
   }
+  // Trigger pair fetch when cross-chain tab is opened
+  if(name==='crosschain' && !xcPairInfo) fetchPairInfo();
 }
 
 // ── TRENDING ─────────────────────────────────────────────────
@@ -1740,6 +2062,392 @@ if(window.ethereum){
   window.ethereum.on('accountsChanged',()=>connectWallet());
   window.ethereum.on('chainChanged',()=>location.reload());
 }
+
+// ── LANGUAGE SYSTEM (5 languages) ────────────────────────────
+const LANGS = {
+  en:{ flag:'🇬🇧', code:'EN' },
+  el:{ flag:'🇬🇷', code:'EL' },
+  de:{ flag:'🇩🇪', code:'DE' },
+  fr:{ flag:'🇫🇷', code:'FR' },
+  ru:{ flag:'🇷🇺', code:'RU' },
+};
+function toggleLangMenu(){
+  const m=document.getElementById('lang-menu');
+  m.classList.toggle('open');
+}
+function setLang(code){
+  curLang=code;
+  const L=LANGS[code];
+  document.getElementById('lang-btn').textContent=L.flag+' '+L.code+' ▾';
+  document.getElementById('lang-menu').classList.remove('open');
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    const txt=el.getAttribute('data-'+code)||el.getAttribute('data-en');
+    if(!txt)return;
+    if(el.tagName==='INPUT') el.placeholder=txt;
+    else el.innerHTML=txt;
+  });
+  renderPaytable(); renderSlotLB();
+  if(document.getElementById('trend-rows').innerHTML) renderTrend();
+  // update t() helper usage in dynamic renders
+}
+// Override t() to support all 5 langs
+function t(en,el,de,fr,ru){
+  const map={en,el,de:de||en,fr:fr||en,ru:ru||en};
+  return map[curLang]||en;
+}
+// Close lang menu on outside click
+document.addEventListener('click',e=>{
+  const w=document.querySelector('.lang-drop-wrap');
+  if(w&&!w.contains(e.target)) document.getElementById('lang-menu').classList.remove('open');
+});
+
+// ── SIDESHIFT CROSS-CHAIN ────────────────────────────────────
+const SS_API   = 'https://sideshift.ai/api/v2';
+const SS_AFF   = 'GcretanSwap'; // affiliate id (optional — set yours after registering at sideshift.ai/affiliate)
+
+// Popular coins with icons — loaded from SideShift API, with fallback
+const SS_FALLBACK_COINS = [
+  {symbol:'BTC',  network:'bitcoin',  name:'Bitcoin',       icon:'₿',  coinId:'btc'},
+  {symbol:'ETH',  network:'ethereum', name:'Ethereum',      icon:'⟠',  coinId:'eth'},
+  {symbol:'SOL',  network:'solana',   name:'Solana',        icon:'◎',  coinId:'sol'},
+  {symbol:'USDC', network:'ethereum', name:'USD Coin (ETH)',icon:'💵', coinId:'usdc'},
+  {symbol:'USDT', network:'tron',     name:'Tether (TRX)',  icon:'💲', coinId:'usdt'},
+  {symbol:'BNB',  network:'bsc',      name:'BNB Chain',     icon:'🟡', coinId:'bnb'},
+  {symbol:'MATIC',network:'polygon',  name:'Polygon',       icon:'🔷', coinId:'matic'},
+  {symbol:'AVAX', network:'avax',     name:'Avalanche',     icon:'🔺', coinId:'avax'},
+  {symbol:'MON',  network:'monad',    name:'Monad',         icon:'🟣', coinId:'mon'},
+  {symbol:'DOGE', network:'dogecoin', name:'Dogecoin',      icon:'🐕', coinId:'doge'},
+  {symbol:'LTC',  network:'litecoin', name:'Litecoin',      icon:'Ł',  coinId:'ltc'},
+  {symbol:'XRP',  network:'ripple',   name:'XRP',           icon:'💧', coinId:'xrp'},
+  {symbol:'DOT',  network:'polkadot', name:'Polkadot',      icon:'●',  coinId:'dot'},
+  {symbol:'ADA',  network:'cardano',  name:'Cardano',       icon:'♦',  coinId:'ada'},
+  {symbol:'ATOM', network:'cosmos',   name:'Cosmos',        icon:'⚛',  coinId:'atom'},
+  {symbol:'ARB',  network:'arbitrum', name:'Arbitrum',      icon:'🔵', coinId:'arb'},
+  {symbol:'OP',   network:'optimism', name:'Optimism',      icon:'🔴', coinId:'op'},
+  {symbol:'NEAR', network:'near',     name:'NEAR Protocol', icon:'🌐', coinId:'near'},
+  {symbol:'TRX',  network:'tron',     name:'TRON',          icon:'🔺', coinId:'trx'},
+  {symbol:'XMR',  network:'monero',   name:'Monero',        icon:'🔶', coinId:'xmr'},
+  {symbol:'USDC', network:'solana',   name:'USDC (Solana)', icon:'💵', coinId:'usdc-solana'},
+  {symbol:'USDT', network:'ethereum', name:'USDT (ETH)',    icon:'💲', coinId:'usdt-eth'},
+  {symbol:'WBTC', network:'ethereum', name:'Wrapped BTC',   icon:'🟠', coinId:'wbtc'},
+  {symbol:'LINK', network:'ethereum', name:'Chainlink',     icon:'⛓', coinId:'link'},
+  {symbol:'UNI',  network:'ethereum', name:'Uniswap',       icon:'🦄', coinId:'uni'},
+];
+
+let xcCoins = [...SS_FALLBACK_COINS];
+let xcFrom  = SS_FALLBACK_COINS[0]; // BTC
+let xcTo    = SS_FALLBACK_COINS[1]; // ETH
+let xcRateType = 'variable';
+let xcPairInfo = null;
+let xcQuoteTimer = null;
+let xcCoinModalFor = 'from';
+let xcActiveShift  = null;
+let xcPollTimer    = null;
+
+// Load real coin list from SideShift
+async function loadSsCoins(){
+  try{
+    const r = await fetch(SS_API+'/coins', {headers:{'Content-Type':'application/json'}});
+    if(!r.ok) return;
+    const coins = await r.json();
+    // SideShift returns array of {coin, network, name, ...}
+    xcCoins = coins.slice(0,200).map(c=>({
+      symbol: c.coin?.toUpperCase()||c.symbol?.toUpperCase()||'?',
+      network: c.network||c.coin||'',
+      name: c.name||c.coin||'',
+      icon: getIconForCoin(c.coin||c.symbol||''),
+      coinId: c.coin+(c.network&&c.network!==c.coin?'-'+c.network:''),
+    }));
+    // Re-render if coin modal is open
+    if(document.getElementById('coin-modal').classList.contains('open')) renderCoinList();
+  }catch(e){ /* use fallback */ }
+}
+
+function getIconForCoin(sym){
+  const map={btc:'₿',eth:'⟠',sol:'◎',usdc:'💵',usdt:'💲',bnb:'🟡',matic:'🔷',
+    avax:'🔺',doge:'🐕',ltc:'Ł',xrp:'💧',dot:'●',ada:'♦',atom:'⚛',
+    arb:'🔵',op:'🔴',near:'🌐',trx:'🔺',xmr:'🔶',link:'⛓',uni:'🦄',
+    wbtc:'🟠',mon:'🟣',bch:'🟢',xlm:'⭐',algo:'◆',eos:'💎',
+  };
+  return map[sym?.toLowerCase()]||'🪙';
+}
+
+// Fetch pair info (min/max/rate)
+async function fetchPairInfo(){
+  if(!xcFrom||!xcTo) return;
+  const fromId = xcFrom.coinId||xcFrom.symbol.toLowerCase();
+  const toId   = xcTo.coinId||xcTo.symbol.toLowerCase();
+  try{
+    const r = await fetch(`${SS_API}/pair/${fromId}/${toId}`);
+    if(!r.ok){ xcPairInfo=null; renderXcInfo(); return; }
+    const data = await r.json();
+    xcPairInfo = data;
+    renderXcInfo();
+    // If amount already entered, recalculate
+    const amt = parseFloat(document.getElementById('xc-amount-in').value);
+    if(amt>0) calcXcOutput(amt);
+    else{ document.getElementById('xc-amount-out').textContent='—'; updateXcBtn(); }
+  }catch(e){ xcPairInfo=null; renderXcInfo(); }
+}
+
+function renderXcInfo(){
+  const box = document.getElementById('xc-info');
+  if(!xcPairInfo){ box.style.display='none'; return; }
+  box.style.display='block';
+  const rate = xcPairInfo.rate||xcPairInfo.depositCoinRate||'—';
+  const min  = xcPairInfo.min||xcPairInfo.minimumAmount||'—';
+  const max  = xcPairInfo.max||xcPairInfo.maximumAmount||'—';
+  document.getElementById('xi-rate').textContent   = rate&&rate!=='—'?parseFloat(rate).toFixed(6)+' '+xcTo.symbol:t('Fetching…','Φόρτωση…','Laden…','Chargement…','Загрузка…');
+  document.getElementById('xi-min').textContent    = min&&min!=='—'?min+' '+xcFrom.symbol:t('—','—','—','—','—');
+  document.getElementById('xi-max').textContent    = max&&max!=='—'?max+' '+xcFrom.symbol:t('Unlimited','Απεριόριστο','Unbegrenzt','Illimité','Без лимита');
+  document.getElementById('xc-min-lbl').textContent= min&&min!=='—'?'min '+min+' '+xcFrom.symbol:'';
+}
+
+function calcXcOutput(amt){
+  if(!xcPairInfo||!amt) return;
+  const rate = parseFloat(xcPairInfo.rate||xcPairInfo.depositCoinRate||0);
+  if(rate>0){
+    const out = (amt*rate).toFixed(6);
+    document.getElementById('xc-amount-out').textContent = out;
+    document.getElementById('xc-rate-lbl').textContent   = '1 '+xcFrom.symbol+' ≈ '+rate.toFixed(6)+' '+xcTo.symbol;
+  }
+  updateXcBtn();
+}
+
+function onXcAmtIn(){
+  clearTimeout(xcQuoteTimer);
+  const v = parseFloat(document.getElementById('xc-amount-in').value);
+  if(!v||v<=0){ document.getElementById('xc-amount-out').textContent='—'; updateXcBtn(); return; }
+  calcXcOutput(v);
+}
+
+function onXcDestInput(){ updateXcBtn(); }
+
+function updateXcBtn(){
+  const btn = document.getElementById('btn-xchain');
+  const txt = document.getElementById('btn-xchain-txt');
+  const amt  = parseFloat(document.getElementById('xc-amount-in').value);
+  const dest = document.getElementById('xc-dest-addr').value.trim();
+  if(!amt||amt<=0){
+    txt.textContent=t('Enter amount','Εισαγωγή ποσού','Betrag eingeben','Entrez le montant','Введите сумму');
+    btn.disabled=true; return;
+  }
+  if(!xcPairInfo){
+    txt.textContent=t('Pair not available','Το ζεύγος δεν είναι διαθέσιμο','Paar nicht verfügbar','Paire non disponible','Пара недоступна');
+    btn.disabled=true; return;
+  }
+  const min=parseFloat(xcPairInfo.min||xcPairInfo.minimumAmount||0);
+  if(min>0&&amt<min){
+    txt.textContent=t('Amount below minimum ('+min+')','Κάτω από ελάχιστο ('+min+')','Unter Minimum ('+min+')','En dessous du minimum','Ниже минимума ('+min+')');
+    btn.disabled=true; return;
+  }
+  if(!dest){
+    txt.textContent=t('Enter destination address','Εισαγωγή διεύθυνσης','Zieladresse eingeben','Adresse de destination','Введите адрес');
+    btn.disabled=true; return;
+  }
+  txt.innerHTML=t('🌐 Create Shift','🌐 Δημιουργία Shift','🌐 Tausch erstellen','🌐 Créer l'échange','🌐 Создать обмен')+' '+xcFrom.symbol+' → '+xcTo.symbol;
+  btn.disabled=false;
+}
+
+function setRateType(type, el){
+  xcRateType=type;
+  document.querySelectorAll('.rate-type-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  fetchPairInfo();
+}
+
+function flipXchain(){
+  [xcFrom,xcTo]=[xcTo,xcFrom];
+  renderXcCoins();
+  xcPairInfo=null;
+  document.getElementById('xc-amount-out').textContent='—';
+  document.getElementById('xc-info').style.display='none';
+  document.getElementById('xc-dest-addr').placeholder=t('Enter '+xcTo.symbol+' address…','Διεύθυνση '+xcTo.symbol+'…','Adresse eingeben…','Entrez l'adresse…','Введите адрес…');
+  fetchPairInfo();
+}
+
+function renderXcCoins(){
+  document.getElementById('xc-from-ico').textContent = xcFrom.icon;
+  document.getElementById('xc-from-sym').textContent = xcFrom.symbol;
+  document.getElementById('xc-from-net').textContent = xcFrom.name;
+  document.getElementById('xc-to-ico').textContent   = xcTo.icon;
+  document.getElementById('xc-to-sym').textContent   = xcTo.symbol;
+  document.getElementById('xc-to-net').textContent   = xcTo.name;
+  document.getElementById('xc-dest-addr').placeholder= t('Enter '+xcTo.symbol+' destination address…','Διεύθυνση προορισμού '+xcTo.symbol+'…','Zieladresse '+xcTo.symbol+'…','Adresse '+xcTo.symbol+'…','Адрес '+xcTo.symbol+'…');
+}
+
+// Create the actual shift via SideShift API
+async function createShift(){
+  const amt  = parseFloat(document.getElementById('xc-amount-in').value);
+  const dest = document.getElementById('xc-dest-addr').value.trim();
+  if(!amt||!dest||!xcPairInfo) return;
+
+  const btn=document.getElementById('btn-xchain');
+  btn.disabled=true;
+  setXcStatus(t('⏳ Creating shift…','⏳ Δημιουργία shift…','⏳ Tausch wird erstellt…','⏳ Création en cours…','⏳ Создание обмена…'),'info');
+
+  try{
+    const fromId = xcFrom.coinId||xcFrom.symbol.toLowerCase();
+    const toId   = xcTo.coinId||xcTo.symbol.toLowerCase();
+
+    const body = {
+      depositCoin:   fromId,
+      settleCoin:    toId,
+      settleAddress: dest,
+      affiliateId:   SS_AFF,
+      ...(xcRateType==='fixed' && xcPairInfo.id ? {quoteId: xcPairInfo.id} : {}),
+    };
+
+    const endpoint = xcRateType==='fixed' ? '/shifts/fixed' : '/shifts/variable';
+    const r = await fetch(SS_API+endpoint, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body),
+    });
+    const data = await r.json();
+
+    if(data.error||data.err||!data.id){
+      const errMsg = data.error?.message||data.error||data.err||t('Shift creation failed','Αποτυχία δημιουργίας shift','Tausch fehlgeschlagen','Échec de création','Ошибка создания обмена');
+      setXcStatus('❌ '+errMsg,'error');
+      btn.disabled=false; return;
+    }
+
+    // SUCCESS
+    xcActiveShift = data;
+    setXcStatus('','info');
+    document.getElementById('xc-status').style.display='none';
+    showShiftResult(data);
+    startPollShift(data.id);
+
+  }catch(e){
+    setXcStatus('❌ '+(e.message||t('Network error','Σφάλμα δικτύου','Netzwerkfehler','Erreur réseau','Ошибка сети')),'error');
+    btn.disabled=false;
+  }
+}
+
+function showShiftResult(shift){
+  const depositAddr = shift.depositAddress?.address||shift.depositAddress||'';
+  const depositMin  = shift.depositMin||shift.depositCoin||xcFrom.symbol;
+  const rate        = shift.rate||xcPairInfo?.rate||'—';
+  const settleAmt   = shift.settleAmount||document.getElementById('xc-amount-out').textContent;
+
+  document.getElementById('sr-details').innerHTML=`
+    <div class="sr-row"><span class="sr-key">Shift ID</span><span class="sr-val" style="color:var(--gold)">${shift.id}</span></div>
+    <div class="sr-row"><span class="sr-key">${t('From','Από','Von','De','Из')}</span><span class="sr-val">${xcFrom.icon} ${xcFrom.symbol} (${xcFrom.network})</span></div>
+    <div class="sr-row"><span class="sr-key">${t('To','Προς','Nach','Vers','В')}</span><span class="sr-val">${xcTo.icon} ${xcTo.symbol} (${xcTo.network})</span></div>
+    <div class="sr-row"><span class="sr-key">${t('You receive','Λαμβάνεις','Sie erhalten','Vous recevez','Получите')}</span><span class="sr-val" style="color:var(--green)">~${settleAmt} ${xcTo.symbol}</span></div>
+    <div class="sr-row"><span class="sr-key">${t('Destination','Προορισμός','Ziel','Destination','Получатель')}</span><span class="sr-val">${document.getElementById('xc-dest-addr').value.slice(0,20)}…</span></div>
+    <div class="sr-row"><span class="sr-key">${t('Rate type','Τύπος τιμής','Kurstyp','Type de taux','Тип курса')}</span><span class="sr-val" style="color:var(--amber)">${xcRateType==='fixed'?t('Fixed 🔒','Σταθερή 🔒','Fest 🔒','Fixe 🔒','Фикс. 🔒'):t('Variable ⚡','Μεταβλητή ⚡','Variabel ⚡','Variable ⚡','Плав. ⚡')}</span></div>`;
+
+  document.getElementById('sr-deposit-addr').textContent = depositAddr||t('Loading…','Φόρτωση…','Laden…','Chargement…','Загрузка…');
+  document.getElementById('sr-explorer-link').href = `https://sideshift.ai/orders/${shift.id}`;
+
+  const res = document.getElementById('shift-result');
+  res.classList.add('show');
+  res.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  document.getElementById('btn-xchain').disabled=false;
+  document.getElementById('btn-xchain-txt').textContent=t('Create New Shift','Νέα Ανταλλαγή','Neuer Tausch','Nouvel échange','Новый обмен');
+}
+
+async function pollShiftStatus(id){
+  try{
+    const r = await fetch(SS_API+'/shifts/'+id);
+    if(!r.ok) return;
+    const data = await r.json();
+    const status = data.status||'';
+    const badge  = document.getElementById('sr-status-badge');
+    const txt    = document.getElementById('sr-status-txt');
+    const statusMap = {
+      waiting:   {en:'⏳ Waiting for deposit',el:'⏳ Αναμονή κατάθεσης',de:'⏳ Warte auf Einzahlung',fr:'⏳ En attente du dépôt',ru:'⏳ Ожидание депозита'},
+      pending:   {en:'🔄 Processing',          el:'🔄 Επεξεργασία',        de:'🔄 Verarbeitung',        fr:'🔄 Traitement',         ru:'🔄 Обработка'},
+      processing:{en:'🔄 Processing',          el:'🔄 Επεξεργασία',        de:'🔄 Verarbeitung',        fr:'🔄 Traitement',         ru:'🔄 Обработка'},
+      settling:  {en:'🔄 Settling',            el:'🔄 Ολοκλήρωση',         de:'🔄 Abrechnung',          fr:'🔄 Règlement',           ru:'🔄 Завершение'},
+      settled:   {en:'✅ Settled!',             el:'✅ Ολοκληρώθηκε!',      de:'✅ Abgeschlossen!',      fr:'✅ Réglé!',              ru:'✅ Завершено!'},
+      refunded:  {en:'↩️ Refunded',            el:'↩️ Επιστράφηκε',        de:'↩️ Erstattet',           fr:'↩️ Remboursé',           ru:'↩️ Возврат'},
+    };
+    const sm = statusMap[status]||{en:status,el:status,de:status,fr:status,ru:status};
+    txt.textContent = sm[curLang]||sm.en;
+    if(status==='settled'){
+      badge.className='sr-status-badge settled';
+      clearInterval(xcPollTimer);
+      toast(t('✅ Shift settled!','✅ Ολοκληρώθηκε!','✅ Tausch abgeschlossen!','✅ Échange réglé!','✅ Обмен завершён!'));
+    }
+  }catch{}
+}
+
+function startPollShift(id){
+  clearInterval(xcPollTimer);
+  xcPollTimer = setInterval(()=>pollShiftStatus(id), 8000);
+  pollShiftStatus(id);
+}
+
+function copyDepositAddr(){
+  const addr=document.getElementById('sr-deposit-addr').textContent;
+  if(!addr||addr===t('Loading…','Φόρτωση…','Laden…','Chargement…','Загрузка…')) return;
+  navigator.clipboard.writeText(addr);
+  toast(t('Deposit address copied! 📋','Διεύθυνση αντιγράφηκε! 📋','Adresse kopiert! 📋','Adresse copiée! 📋','Адрес скопирован! 📋'));
+}
+
+// Coin selector modal
+function openCoinModal(side){
+  xcCoinModalFor=side;
+  document.getElementById('coin-search-inp').value='';
+  document.getElementById('coin-modal').classList.add('open');
+  renderCoinList();
+  document.getElementById('coin-search-inp').focus();
+}
+function closeCoinModal(){ document.getElementById('coin-modal').classList.remove('open'); }
+function closeCoinBg(e){ if(e.target.id==='coin-modal') closeCoinModal(); }
+
+function renderCoinList(){
+  const q=document.getElementById('coin-search-inp').value.toLowerCase();
+  const cur=(xcCoinModalFor==='from'?xcFrom:xcTo).coinId;
+  const filtered=xcCoins.filter(c=>
+    c.symbol.toLowerCase().includes(q)||c.name.toLowerCase().includes(q)||c.network.toLowerCase().includes(q)
+  ).slice(0,80);
+  document.getElementById('coin-list').innerHTML=filtered.map((c,i)=>`
+    <div class="coin-list-item" onclick="selectXcCoin(${i},${JSON.stringify(q)})">
+      <span class="cli-ico">${c.icon}</span>
+      <div>
+        <div class="cli-name">${c.symbol}</div>
+        <div class="cli-net">${c.name} · ${c.network}</div>
+      </div>
+      ${c.coinId===cur?'<span class="cli-ck">✓</span>':''}
+    </div>`).join('');
+}
+
+function selectXcCoin(visibleIdx, q){
+  const filtered=xcCoins.filter(c=>
+    c.symbol.toLowerCase().includes(q)||c.name.toLowerCase().includes(q)||c.network.toLowerCase().includes(q)
+  ).slice(0,80);
+  const coin=filtered[visibleIdx];
+  if(!coin)return;
+  if(xcCoinModalFor==='from') xcFrom=coin;
+  else xcTo=coin;
+  closeCoinModal();
+  renderXcCoins();
+  xcPairInfo=null;
+  document.getElementById('xc-amount-out').textContent='—';
+  document.getElementById('xc-info').style.display='none';
+  document.getElementById('shift-result').classList.remove('show');
+  fetchPairInfo();
+  updateXcBtn();
+}
+
+function setXcStatus(msg,type){
+  const el=document.getElementById('xc-status');
+  el.innerHTML=msg; el.className='xchain-status '+(type||'info');
+  if(!msg) el.style.display='none';
+}
+
+// ── INIT cross-chain ──────────────────────────────────────────
+loadSsCoins();    // async, uses fallback if fails
+renderXcCoins();
+// Fetch pair on page load
+setTimeout(()=>{
+  if(document.getElementById('tab-crosschain').classList.contains('active')) fetchPairInfo();
+},200);
 </script>
 </body>
 </html>
