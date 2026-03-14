@@ -754,7 +754,7 @@ const WMON        = '0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A';
 const GCRETANSWAP = '0xae75083f7A600d63E8fc3769d21c2bb3FB74251C'; // ← paste deployed contract address here
 const FEE_TIERS   = [500, 3000, 10000];
 const SS_API      = 'https://sideshift.ai/api/v2';
-const SS_AFF      = 'GcretanSwap';
+// const SS_AFF      = 'GcretanSwap';
 
 // ═══════════════════════════════════════════════════════════
 //  ABIS
@@ -1674,7 +1674,7 @@ async function createShift(){
   btn.disabled=true;
   showXcStat('⏳ Creating shift…','info');
   try{
-    const body={depositCoin:xcFrom.id,settleCoin:xcTo.id,settleAddress:dest,affiliateId:SS_AFF};
+    const body={depositCoin:xcFrom.id,settleCoin:xcTo.id,settleAddress:dest};
     const ep=xcRateType==='fixed'?'/shifts/fixed':'/shifts/variable';
     const r=await fetch(SS_API+ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const data=await r.json();
