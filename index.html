@@ -1673,13 +1673,32 @@ async function createShift(){
   btn.disabled=true;
   showXcStat('⏳ Creating shift…','info');
   try{
-    const body={depositCoin:xcFrom.id,settleCoin:xcTo.id,settleAddress:dest};
+    const AFFILIATE_ID = 'G4nvHmbdX'; // ← paste your SideShift affiliate ID here
+    const body=JSON.stringify({
+      depositCoin:  xcFrom.id,
+      settleCoin:   xcTo.id,
+      settleAddress:dest,
+      affiliateId:  AFFILIATE_ID
+    });
     const ep=xcRateType==='fixed'?'/shifts/fixed':'/shifts/variable';
-    const r=await fetch(SS_API+ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const r=await fetch(SS_API+ep,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      },
+      body
+    });
     const data=await r.json();
-    if(!data.id||data.error){
-      const em=data.error?.message||data.error||'Shift creation failed';
-      showXcStat('❌ '+em,'error'); btn.disabled=false; return;
+    if(!r.ok||!data.id||data.error){
+      const em=data.error?.message||data.error||data.err||('HTTP '+r.status);
+      // If affiliateId is required, show helpful message
+      if(String(em).toLowerCase().includes('affiliate')){
+        showXcStat('❌ SideShift requires an affiliate ID. Register free at sideshift.ai/affiliate and paste your ID in the code (const AFFILIATE_ID).','error');
+      } else {
+        showXcStat('❌ '+em,'error');
+      }
+      btn.disabled=false; return;
     }
     xcActiveShift=data;
     document.getElementById('xc-stat').style.display='none';
